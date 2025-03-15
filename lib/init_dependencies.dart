@@ -15,6 +15,7 @@ Future<void> initDependencies() async {
     url: AppSecrets.supabaseUrl,
   );
   serviceLocator.registerLazySingleton(() => supabase.client);
+  _initAuth();
 }
 
 void _initAuth() {
