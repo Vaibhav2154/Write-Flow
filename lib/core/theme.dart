@@ -1,7 +1,7 @@
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
-class AppThme {
+class AppTheme {
   static _border([Color color = AppPallete.borderColor]) => OutlineInputBorder(
           borderSide: BorderSide(
             color: color,
@@ -10,9 +10,9 @@ class AppThme {
           borderRadius: BorderRadius.circular(10)
         );
   static final darkThemeMOde = ThemeData.dark().copyWith(
-      scaffoldBackgroundColor: AppPallete.backgroundColor,
+      scaffoldBackgroundColor: AppPallete.primaryFgColor,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppPallete.backgroundColor,
+        backgroundColor: AppPallete.primaryFgColor,
         elevation: 0,
       ),
       inputDecorationTheme: InputDecorationTheme(
