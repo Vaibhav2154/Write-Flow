@@ -8,6 +8,7 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  // usecases beign used in the bloc
   final UserSignUp _userSignUp;
   final UserLogin _userLogin;
   AuthBloc({
