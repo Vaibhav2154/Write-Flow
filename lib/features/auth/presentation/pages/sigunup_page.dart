@@ -1,4 +1,6 @@
+import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
+import 'package:blog_app/core/utils/show_snacbac.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_field.dart';
@@ -37,78 +39,93 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Image.asset('assets/images/logo.png', height: 200, width: 200),
-              SizedBox(height: 10),
-              _signUpText(),
-              SizedBox(height: 20),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      AuthField(
-                        hintText: 'Name',
-                        controller: nameController,
-                      ),
-                      SizedBox(height: 15),
-                      AuthField(
-                        hintText: 'Email',
-                        controller: emailControlller,
-                      ),
-                      SizedBox(height: 15),
-                      AuthField(
-                        hintText: 'Password',
-                        controller: passwordController,
-                        isObscureText: true,
-                      ),
-                      SizedBox(height: 20),
-                      AuthGradientButton(
-                        buttonText: 'Sign Up',
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            context.read<AuthBloc>().add(
-                                  AuthSignUp(
-                                    name: nameController.text,
-                                    email: emailControlller.text.trim(),
-                                    password: passwordController.text.trim(),
-                                  ),
-                                );
-                          }
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context, LoginPage.route());
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                              text: 'Already have an account?',
-                              style: Theme.of(context).textTheme.titleMedium,
-                              children: [
-                                TextSpan(
-                                  text: ' Sign in',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        color: AppPallete.gradient1,
-                                        fontWeight: FontWeight.bold,
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if(state is AuthFailure){
+              showSnackBar(context, state.message);
+            }
+          },
+          builder: (context, state) {
+            if(state is AuthLoading){
+              return Loader();
+            }
+            return Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Image.asset('assets/images/logo.png',
+                      height: 200, width: 200),
+                  SizedBox(height: 10),
+                  _signUpText(),
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          AuthField(
+                            hintText: 'Name',
+                            controller: nameController,
+                          ),
+                          SizedBox(height: 15),
+                          AuthField(
+                            hintText: 'Email',
+                            controller: emailControlller,
+                          ),
+                          SizedBox(height: 15),
+                          AuthField(
+                            hintText: 'Password',
+                            controller: passwordController,
+                            isObscureText: true,
+                          ),
+                          SizedBox(height: 20),
+                          AuthGradientButton(
+                            buttonText: 'Sign Up',
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                context.read<AuthBloc>().add(
+                                      AuthSignUp(
+                                        name: nameController.text,
+                                        email: emailControlller.text.trim(),
+                                        password:
+                                            passwordController.text.trim(),
                                       ),
-                                ),
-                              ]),
-                        ),
+                                    );
+                              }
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, LoginPage.route());
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                  text: 'Already have an account?',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                  children: [
+                                    TextSpan(
+                                      text: ' Sign in',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            color: AppPallete.gradient1,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -122,5 +139,5 @@ class _SignUpPageState extends State<SignUpPage> {
         style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
       ),
     );
-  } 
+  }
 }
