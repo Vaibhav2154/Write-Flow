@@ -14,7 +14,7 @@ class BlogPage extends StatelessWidget {
             Image.asset(
               'assets/images/logo.png',
               height: 100,
-              width: 100,
+              width: 80,
             ),
             SizedBox(
               width: 60,
