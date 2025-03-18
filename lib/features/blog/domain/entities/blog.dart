@@ -16,6 +16,5 @@ class Blog {
     required this.topics,
     required this.updatedAt,
   });
-
   
 }
