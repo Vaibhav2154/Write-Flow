@@ -11,30 +11,50 @@ class BlogModel extends Blog {
     required super.updatedAt,
   });
 // Convert a Blog instance to map
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,
-      'posterId': posterId,
+      'poster_id': posterId,
       'title': title,
       'content': content,
-      'imageUrl': imageUrl,
+      'image_url': imageUrl,
       'topics': topics,
-      'updatedAt': updatedAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 
   // Create a Blog instance from map
-  factory BlogModel.fromMap(Map<String, dynamic> map) {
+  factory BlogModel.fromJson(Map<String, dynamic> map) {
     return BlogModel(
       id: map['id'],
-      posterId: map['posterId'],
+      posterId: map['poster_id'],
       title: map['title'],
       content: map['content'],
-      imageUrl: map['imageUrl'],
-      topics: List<String>.from(map['topics'] as List<String>),
-      updatedAt: map['updatedAt'] == null
+      imageUrl: map['image_url'],
+      topics: List<String>.from(map['topics'] ?? []),
+      updatedAt: map['updated_at'] == null
           ? DateTime.now()
-          : DateTime.parse(map['updatedAt']),
+          : DateTime.parse(map['updated_at']),
+    );
+  }
+
+  BlogModel copyWith({
+    String? id,
+    String? posterId,
+    String? title,
+    String? content,
+    String? imageUrl,
+    List<String>? topics,
+    DateTime? updatedAt,
+  }) {
+    return BlogModel(
+      id: id ?? this.id,
+      posterId: posterId ?? this.posterId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      imageUrl: imageUrl ?? this.imageUrl,
+      topics: topics ?? this.topics,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
