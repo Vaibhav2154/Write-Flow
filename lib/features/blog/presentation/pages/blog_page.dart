@@ -1,29 +1,43 @@
+import 'package:blog_app/core/common/widgets/loader.dart';
+import 'package:blog_app/core/theme/app_pallete.dart';
+import 'package:blog_app/core/utils/show_snacbac.dart';
+import 'package:blog_app/features/blog/presentation/bloc/blog.dart';
 import 'package:blog_app/features/blog/presentation/pages/add_new_blog_page.dart';
+import 'package:blog_app/features/blog/presentation/widgets/blog_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BlogPage extends StatelessWidget {
+class BlogPage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (context) => const BlogPage());
   const BlogPage({super.key});
+
+  @override
+  State<BlogPage> createState() => _BlogPageState();
+}
+
+class _BlogPageState extends State<BlogPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<BlogBloc>().add(BlogFetchAllBlogs());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 100,
-              width: 80,
-            ),
-            SizedBox(
-              width: 60,
-            ),
-            const Text(
-              'Write Flow',
-            ),
-          ],
+        title: Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Write Flow',
+          ),
+        ),
+        leadingWidth: 50,
+        leading: Image.asset(
+          'assets/images/logo.png',
+          height: 200,
+          width: 80,
         ),
         actions: [
           IconButton(
@@ -34,8 +48,32 @@ class BlogPage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Blog Page'),
+      body: BlocConsumer<BlogBloc, BlogState>(
+        listener: (context, state) {
+          if (state is BlogFailure) {
+            showSnackBar(context, state.error);
+          }
+        },
+        builder: (context, state) {
+          if (state is BlogLoading) {
+            return const Loader();
+          }
+          if (state is BlogDisplaySuccess) {
+            return ListView.builder(
+              itemCount: state.blogs.length,
+              itemBuilder: (context, index) {
+                final blog = state.blogs[index];
+                return BlogCard(
+                  blog: blog,
+                  color: index % 2 == 0
+                      ? AppPallete.gradient4
+                      : AppPallete.gradient2,
+                );
+              },
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }

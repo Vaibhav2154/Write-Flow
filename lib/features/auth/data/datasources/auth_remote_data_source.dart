@@ -38,7 +38,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerExpection('User is null');
       }
       return UserModel.fromJson(response.user!.toJson());
-    } catch (e) {
+    } on AuthException catch (e) {
+      throw ServerExpection(e.message);
+    }catch (e) {
       throw ServerExpection(e.toString());
     }
   }
@@ -61,7 +63,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw ServerExpection('User is null');
       }
       return UserModel.fromJson(response.user!.toJson());
-    } catch (e) {
+    } on AuthException catch (e) {
+      throw ServerExpection(e.message);
+    }catch (e) {
       throw ServerExpection(e.toString());
     }
   }
